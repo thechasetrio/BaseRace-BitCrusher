@@ -49,5 +49,11 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 playing = False
+            
+            # Nest all checks for keyboard inputs inside of a single check for KEYDOWN, for performace reasons.
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    playing = False
+            
     # main always holds the main loop and event handler
     # main is always the last function
