@@ -9,10 +9,8 @@ MAIN + event handler and loop
 '''
 
 # IMPORTS #
-import blah # engine
-import blah1 # file pathing
-import pygame # level building tool
-# must go from smallest to biggest and with short descriptions
+import blah, blah1, pygame
+# all in 1 import statement
 
 
 # INITIALIZATIONS #
