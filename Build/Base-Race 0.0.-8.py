@@ -72,16 +72,15 @@ def main():
                     shoot = True
                     # shoot angle
                     mousePos = pygame.mouse.get_pos()
-                    adj = ((screen[0] / 2) - mousePos[0])
-                    opp = ((screen[1] / 2) - mousePos[1])
                     # gets degree measurement of shooting
-                    degree = math.degrees(math.atan(adj/opp))
-                    if adj > 0 and opp < 0:
-                        degree += 360
-                    elif adj < 0 and opp > 0:
-                        degree -= 180
-                    elif adj < 0 and opp < 0:
-                        degree += 180
+                    try:
+                        degree = math.degrees(math.atan(((screen[0] / 2) - mousePos[0])/((screen[1] / 2) - mousePos[1])))
+                    # STOPS A DIVISION BY ZERO CRASH
+                    except:
+                        if ((screen[0] / 2) - mousePos[0]) >= 0:
+                            degree = 0
+                        else: 
+                            degree = 180
 
 main()
 pygame.quit()
