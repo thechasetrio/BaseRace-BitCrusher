@@ -17,6 +17,7 @@ blockSize = 32
 playerRadius = 8
 
 # client to server variables
+gameStart = False
 up = False
 down = False
 left = False
@@ -41,46 +42,75 @@ port = 25565 # I like building brown bricks with minecraft
 # start window
 win = pygame.display.set_mode(screen,pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE)
 
+# LEVEL FILE #
+layout = open('BasicWorld.txt', 'r')
+
+rectList = []
+
+def buildWorld():
+    row = 0
+    world = layout.read().split('\n')
+    for r in world:
+        col = 0
+        for c in r:
+            if c != 'N':
+                rectList.append(pygame.Rect((c * blockSize), (r * blockSize), blockSize, blockSize))
+            col += blockSize
+        row += blockSize
+                    
 def main():
     # IMPORTANT MAIN LOOP #
     while True:
         for event in pygame.event.get():
+            
             # events go here
             if event.type == pygame.QUIT:
                 return
-            if event.type == pygame.KEYDOWN:
-                # keystrokes go here
-                key = pygame.key.get_pressed()
-                # quit
-                if key[pygame.K_ESCAPE]:
-                    return
-                # WASD
-                if key[pygame.K_w]:
-                    up = True
-                if key[pygame.K_a]:
-                    left = True
-                if key[pygame.K_s]:
-                    down = True
-                if key[pygame.K_d]:
-                    right = True
-            # get shoot and degree throuhg inverse tangent and a try/except
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                # mouse things go here
-                mouse = pygame.mouse.get_pressed()
-                # shooting
-                if mouse[0]:
-                    shoot = True
-                    # shoot angle
-                    mousePos = pygame.mouse.get_pos()
-                    # gets degree measurement of shooting
-                    try:
-                        degree = math.degrees(math.atan(((screen[0] / 2) - mousePos[0])/((screen[1] / 2) - mousePos[1])))
-                    # STOPS A DIVISION BY ZERO CRASH
-                    except:
-                        if ((screen[0] / 2) - mousePos[0]) >= 0:
-                            degree = 0
-                        else: 
-                            degree = 180
+            
+            # keystrokes go here
+            key = pygame.key.get_pressed()
+            # quit
+            if key[pygame.K_ESCAPE]:
+                return
+            # WASD
+            if key[pygame.K_w]:
+                up()
+            if key[pygame.K_a]:
+                left()
+            if key[pygame.K_s]:
+                down()
+            if key[pygame.K_d]:
+                right()
+            
+            # mouse handler
+            mouse = pygame.mouse.get_pressed()
+            # shooting
+            if mouse[0]:
+                shoot = True
+                # shoot angle
+                mousePos = pygame.mouse.get_pos()
+                adj = ((screen[0] / 2) - mousePos[0])
+                opp = ((screen[1] / 2) - mousePos[1])
+                # get quadrant to find total angle
+                if adj >= 0 and opp > 0:
+                    q = 0
+                elif adj <= 0 and opp > 0:
+                    q = 1
+                elif adj <= 0 and opp < 0:
+                    q = 2
+                elif adj <= 0 and opp < 0:
+                    q = 3
+                elif adj < 0 and opp == 0:
+                    degree = 180
+                elif adj > 0 and opp == 0:
+                    degree = 0
+                
+                # no try except crashes here
+                if adj == 0:
+                    # CATCH THAT DIVISION BY ZERO SON
+                    degree = 90 * q
+                else:
+                    degree = round(math.degrees(math.atan(abs(opp)/abs(adj))) + (90 * q), 4)
 
 main()
 pygame.quit()
