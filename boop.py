@@ -26,19 +26,19 @@ while not gameExit:
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             gameExit = True
-
-    if mousePos[0] - (scrW / 2) > 0:
-        if mousePos[1] - (scrW / 2) > 0:
-            angle = ((180 / math.pi) * math.atan((mousePos[1] - (scrW / 2))/(mousePos[0] - (scrW / 2))))
-        else:
-            angle = ((180 / math.pi) * math.atan((mousePos[1] - (scrW / 2))/(mousePos[0] - (scrW / 2))))
-    elif mousePos[0] - (scrW / 2) < 0:
-        angle = ((180 / math.pi) * math.atan((mousePos[1] - (scrW / 2))/(mousePos[0] - (scrW / 2))))
+    
+    ###THE IMPORTANT LINES###
+            
+    if mousePos[0] > scrW/ 2:
+        angle = (((scrW / 2) // mousePos[0]) * 90) + (((180 / math.pi) * math.atan((mousePos[1] - (scrW / 2)) / (mousePos[0] - (scrW / 2)))) * (-1)) + (mousePos[1] // (scrW / 2)) * 360
+    elif mousePos[0] < scrW/ 2:
+        angle = (((mousePos[0] // (scrW / 2)) * 90) + (180 / math.pi) * math.atan((mousePos[1] - (scrW / 2)) / (mousePos[0] - (scrW / 2)))) * (-1) + 180
     else:
-        mousePos[0] += 1
-        if mousePos[0] - (scrW / 2) > 0:
-            angle = ((180 / math.pi) * math.atan((mousePos[1] - (scrW / 2))/(mousePos[0] - (scrW / 2))))
+        if mousePos[1] < 250:
+            angle = 90.0
         else:
-            angle = (-1 * (180 / math.pi) * math.atan((mousePos[1] - (scrW / 2))/(mousePos[0] - (scrW / 2))))
+            angle = 270.0
+    
+    ###THE IMPORTANT LINES###
 
 pygame.quit()
