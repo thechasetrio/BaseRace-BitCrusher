@@ -1,8 +1,6 @@
 import pygame, time, random, threading, multiprocessing
 from pygame.locals import *
 
-global window
-
 class blitThread(threading.Thread):
    def __init__(self, startPoint, dims):
       threading.Thread.__init__(self)
